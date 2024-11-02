@@ -12,6 +12,8 @@ def emotion_detector_endpoint():
     data = request.json
     text_to_analyze = data.get('text')
     response = emotion_detector(text_to_analyze)
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again."
     response_message = (
         f"For the given statement, the system response is "
         f"'anger': {response['anger']}, 'disgust': {response['disgust']}, "

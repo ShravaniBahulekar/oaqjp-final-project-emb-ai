@@ -2,6 +2,15 @@ import requests
 import json
 
 def emotion_detector(text_to_analyze):
+    if not text_to_analyze.strip():  # Check if the input is blank or just whitespace
+        return {
+            'anger': None,
+            'disgust': None,
+            'fear': None,
+            'joy': None,
+            'sadness': None,
+            'dominant_emotion': None
+        }
     url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
     headers = {
         "grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock",
@@ -17,7 +26,17 @@ def emotion_detector(text_to_analyze):
     response = requests.post(url, headers=headers, json=input_json)
     
     # Print the full response for debugging
-    print("Full Response:", response.json())
+    # print("Full Response:", response.json())
+
+    if response.status_code == 400:
+        return {
+            'anger': None,
+            'disgust': None,
+            'fear': None,
+            'joy': None,
+            'sadness': None,
+            'dominant_emotion': None
+        }
     
     # Check if the request was successful
     if response.status_code == 200:
